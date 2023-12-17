@@ -1,0 +1,29 @@
+﻿.carousel-item img {
+    /* height: 500px; */
+    height: 81vh;
+}
+
+.card {
+    margin-top: 50px;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    height:500px;
+    /* border-radius: 20px; */
+}
+
+    .card img {
+        height: 100px;
+    }
+
+.col-md-3 {
+    /* margin-left: 50px; */
+    /* margin-top: -30px; */
+}
+
+#banner {
+    height: 120px;
+    background-color: rgba(89, 183, 226, 0.562);
+}
+
+#loginCardImg {
+    border-radius: 50%;
+}

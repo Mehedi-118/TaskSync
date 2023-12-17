@@ -1,0 +1,1115 @@
+﻿@using PTSL.Ovidhan.Web.Core.Helper.Enum;
+@{
+    ViewData["Title"] = "Dashboard";
+    var currentDate = DateTime.Now.ToString("dd MMMM, yyyy");
+}
+
+@section Styles {
+                <link rel="stylesheet" href="~/css/sufl/dashboard.css">
+}
+@section Scripts {
+                <script src="~/js/chart.min.js" defer></script>
+}
+
+<style>
+    #event .event-list {
+        min-height: 410px !important;
+    }
+
+    #event {
+        border-radius: 16px !important;
+    }
+
+    .theme-white a:hover {
+        text-decoration: none;
+    }
+
+    #energy-condition .single-chart .energy-label {
+        margin-top: 15px;
+    }
+
+    #welcome {
+        box-shadow: 5px 3px 3px 3px #dbd9d9f2;
+    }
+    #monthly-record {
+        box-shadow: 5px 3px 3px 3px #dbd9d9f2;
+    }
+    #departmental-training {
+        border: 1px solid rgba(0, 0, 0, 0.15);
+        max-height: 300px;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    #bad-loan-chart {
+        height: 415px !important;
+    }
+
+
+    /* Tab */
+    .cflex {
+        display: flex;
+    }
+    .input-select {
+        column-gap: 15px;
+        padding: 15px 0 5px 0;
+        border-top: 1px solid gainsboro;
+    }
+    .ctab {
+        padding: 5px 15px;
+        color: black;
+        border-radius: 5px 5px 0 0;
+        cursor: pointer;
+    }
+    .ctab.active {
+        background: #d1d1d1;
+        font-weight: bold;
+    }
+
+    .forest-input {
+        display: flex;
+        gap: 2px;
+        align-items: baseline;
+    }
+
+        .forest-input label {
+            /* background: #abebc6; */
+            color: black;
+            padding: 7px 12px;
+            border-radius: 5px;
+            font-weight: 500;
+        }
+
+        .forest-input select {
+            border: 1px solid #abebc6;
+            color: black;
+            padding: 7px 12px;
+            border-radius: 5px;
+            font-weight: 500;
+            min-width: 130px;
+            max-width: 250px;
+        }
+
+    .search {
+        margin-left: auto;
+    }
+
+        .search button {
+            all: unset;
+            padding: 3px 12px;
+            font-weight: 500;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .search #FilterDataSearch {
+            background: #abebc6;
+            color: #212f3d;
+        }
+
+        .search #ClearFilter {
+            background: #eeee;
+            color: #212f3d;
+        }
+            .search #ClearFilter:hover {
+                background: #eeee;
+                color: #212f3d;
+            }
+
+            .search #FilterDataSearch:hover {
+                opacity: 0.9;
+            }
+    #MeetingList {
+        max-height: 224px;
+        overflow-y: scroll;
+    }
+</style>
+
+<script>
+    function clearAndLoadForm() {
+        resetFromData('#filterForm');
+        loadAllDashboardData();
+    }
+</script>
+
+<div id="dashboard">
+    <partial name="./_ForestLocation.cshtml">
+
+    <div class="row dashboard-child">
+        <!-- Welcome -->
+        <div class="col-md-8">
+            <div class="h-100 card-radius" id="welcome">
+				<!--
+                <img class="img-community-module" src="~/img/login/community-module.png" />
+                <img class="img-earth" src="~/img/dashboard/earth.png" />
+				-->
+                <h1>Welcome,</h1>
+                <p style="max-width: 290px;">Get the power to take your Community Management System to the next level.</p>
+                <div class="flex items-center">
+                    <div style="display: none;">
+
+                        <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <g filter="url(#filter0_d_1_870)">
+                                <circle cx="32" cy="30" r="25" fill="white" />
+                                <g clip-path="url(#clip0_1_870)">
+                                    <g opacity="0.1">
+                                        <path d="M18.5 16.5001H45.5V23.6251H18.5V16.5001Z" fill="#058527" />
+                                    </g>
+                                    <path d="M41.2313 15.0001C43.2372 15.0001 43.9646 15.209 44.6979 15.6012C45.4312 15.9934 46.0068 16.5689 46.399 17.3022C46.7911 18.0356 47 18.7629 47 20.7689V39.2314C47 41.2373 46.7911 41.9647 46.399 42.698C46.0068 43.4314 45.4312 44.0069 44.6979 44.3991C43.9646 44.7913 43.2372 45.0001 41.2313 45.0001H22.7687C20.7628 45.0001 20.0354 44.7913 19.3021 44.3991C18.5688 44.0069 17.9932 43.4314 17.601 42.698C17.2089 41.9647 17 41.2373 17 39.2314V20.7689C17 18.7629 17.2089 18.0356 17.601 17.3022C17.9932 16.5689 18.5688 15.9934 19.3021 15.6012C20.0354 15.209 20.7628 15.0001 22.7687 15.0001H41.2313ZM41.5349 17.2515L22.7687 17.2501C21.2796 17.2501 20.8261 17.3377 20.3632 17.5853C20.022 17.7677 19.7676 18.0221 19.5851 18.3633C19.3553 18.7931 19.2633 19.2149 19.2514 20.4652L19.25 39.2314C19.25 40.7205 19.3376 41.174 19.5851 41.6369C19.7676 41.9782 20.022 42.2325 20.3632 42.415C20.8261 42.6625 21.2796 42.7501 22.7687 42.7501H41.2313C42.7204 42.7501 43.1739 42.6625 43.6368 42.415C43.978 42.2325 44.2324 41.9782 44.4149 41.6369C44.6624 41.174 44.75 40.7205 44.75 39.2314V20.7689C44.75 19.2797 44.6624 18.8262 44.4149 18.3633C44.2324 18.0221 43.978 17.7677 43.6368 17.5853C43.207 17.3554 42.7853 17.2634 41.5349 17.2515ZM27.871 27.8344C30.1671 27.8344 31.8268 29.2362 31.8268 31.1779C31.8268 32.4266 31.1903 33.4579 29.2164 35.4076L26.7833 37.8488V37.9857H32.004V39.7501H23.9313V38.308L27.8065 34.3441C29.3937 32.7328 29.7885 32.1285 29.7885 31.3068C29.7885 30.2836 28.9506 29.5424 27.8065 29.5424C26.59 29.5424 25.7682 30.34 25.7682 31.5243V31.5565H23.8185V31.5243C23.8185 29.349 25.4862 27.8344 27.871 27.8344ZM39.1986 28.1244V39.7501H37.12V30.2191H36.983L34.0907 32.2494V30.2513L37.1281 28.1244H39.1986ZM41.375 22.5001C41.9963 22.5001 42.5 23.0038 42.5 23.6251C42.5 24.2464 41.9963 24.7501 41.375 24.7501H22.625C22.0037 24.7501 21.5 24.2464 21.5 23.6251C21.5 23.0038 22.0037 22.5001 22.625 22.5001H41.375Z" fill="#058527" />
+                                </g>
+                            </g>
+                            <defs>
+                                <filter id="filter0_d_1_870" x="0" y="0" width="64" height="64" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+                                    <feFlood flood-opacity="0" result="BackgroundImageFix" />
+                                    <feColorMatrix in="SourceAlpha" type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 127 0" result="hardAlpha" />
+                                    <feOffset dy="2" />
+                                    <feGaussianBlur stdDeviation="3.5" />
+                                    <feColorMatrix type="matrix" values="0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0.1 0" />
+                                    <feBlend mode="normal" in2="BackgroundImageFix" result="effect1_dropShadow_1_870" />
+                                    <feBlend mode="normal" in="SourceGraphic" in2="effect1_dropShadow_1_870" result="shape" />
+                                </filter>
+                                <clipPath id="clip0_1_870">
+                                    <rect width="30" height="30" fill="white" transform="translate(17 15.0001)" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+
+                    </div>
+                    <div class="current-date">@currentDate</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Monthly Record -->
+        <div class="col-md-4">
+            <div class="h-100 card-radius" id="monthly-record">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h2>Monthly Record</h2>
+                        <div class="text-center" style="position: relative;">
+
+                            <canvas width="56" height="56" id="monthly-record-circle-chart"></canvas>
+                            <div id="monthly-record-chart-label">0%</div>
+
+                        </div>
+                    </div>
+                    <div class="col-md-8">
+                        <div class="tk-info">
+                            <p class="budget-title">Total Project Budget</p>
+                            <p class="tk"><span>৳</span> <span id="TotalTarget">0</span></p>
+                        </div>
+                        <div class="tk-info">
+                            <p class="budget-title">Total Expense</p>
+                            <p class="tk"><span>৳</span> <span id="TotalExpenditure">0</span></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4" id="common-stats">
+        <!-- Total VCF/FCV -->
+        <div class="col-md-4">
+            <div class="my-card card-padding">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="my-card-title">Total VCF/FCV</h3>
+                        <p class="common-tk" id="totalFcvVcvId">loading...</p>
+                    </div>
+                    <div class="col-md-4 text-right">
+
+                        <svg width="57" height="57" viewBox="0 0 57 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="57" height="57" rx="28.5" fill="#D1F0E0" />
+                            <path d="M18.25 18.5V40.355L23.5 35.975L28.0375 39.725L32.5 35.975L37.75 40.355V18.5H18.25ZM33.25 31.25H22.75V29.75H33.25V31.25ZM33.25 27.5H22.75V26H33.25V27.5ZM33.25 23.75H22.75V22.25H33.25V23.75Z" fill="#00AB55" />
+                        </svg>
+
+                    </div>
+                </div>
+                <div class="common-data">
+                    <div class="data">
+                        <div class="box" style="background: #1E9770;"></div>
+                        <p id="executiveCommitteeMemberId">loading...</p>
+                    </div>
+                    <div class="data">
+                        <div class="box" style="background: #1E9770;"></div>
+                        <p id="subExecutiveCommitteeMemberId">loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Beneficiary -->
+        <div class="col-md-4">
+            <div class="my-card card-padding">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="my-card-title">Total Beneficiary</h3>
+                        <p class="common-tk" id="totalBeneficiaryId">loading...</p>
+                    </div>
+                    <div class="col-md-4 text-right">
+
+                        <svg width="57" height="57" viewBox="0 0 57 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="57" height="57" rx="28.5" fill="#FFE3E2" />
+                            <g clip-path="url(#clip0_1_2110)">
+                                <path d="M35.0625 28.5C37.075 28.5 38.6937 26.8666 38.6937 24.8541C38.6937 22.8416 37.075 21.2083 35.0625 21.2083C33.05 21.2083 31.4166 22.8416 31.4166 24.8541C31.4166 26.8666 33.05 28.5 35.0625 28.5ZM24.125 27.0416C26.5458 27.0416 28.4854 25.0875 28.4854 22.6666C28.4854 20.2458 26.5458 18.2916 24.125 18.2916C21.7041 18.2916 19.75 20.2458 19.75 22.6666C19.75 25.0875 21.7041 27.0416 24.125 27.0416ZM35.0625 31.4166C32.3937 31.4166 27.0416 32.7583 27.0416 35.427V38.7083H43.0833V35.427C43.0833 32.7583 37.7312 31.4166 35.0625 31.4166ZM24.125 29.9583C20.727 29.9583 13.9166 31.6645 13.9166 35.0625V38.7083H24.125V35.427C24.125 34.1875 24.6062 32.0145 27.5812 30.3666C26.3125 30.1041 25.0875 29.9583 24.125 29.9583Z" fill="#FF635E" />
+                            </g>
+                            <defs>
+                                <clipPath id="clip0_1_2110">
+                                    <rect width="35" height="35" fill="white" transform="translate(11 11)" />
+                                </clipPath>
+                            </defs>
+                        </svg>
+
+                    </div>
+                </div>
+                <div class="common-data row">
+                    <div class="col-md-7">
+                        <div class="data">
+                            <div class="box" style="background: #1E9770;"></div>
+                            <p><span id="totalGotTrainig">0</span>% Got Training</p>
+                        </div>
+                        <div class="data">
+                            <div class="box" style="background: #1E9770;"></div>
+                            <p><span id="totalGotLoanPercentage">0</span>% Got Loan</p>
+                        </div>
+                        <div class="data">
+                            <div class="box" style="background: #1E9770;"></div>
+                            <p style="line-height: 15px;"><span id="TotalLoanRepaymentPercentage">0</span>% Loan Repayment</p>
+                        </div>
+                        <div class="data">
+                            <div class="box" style="background: #1E9770;"></div>
+                            <p><span id="TotalEvilWealthPercentage">0</span>% Evil Debth</p>
+                        </div>
+                    </div>
+                    <div class="col-md-5" style="padding:0px">
+                        <div class="data">
+                            <div class="box" style="background: #1E9770;"></div>
+                            <p id="malePercentageId">loading...</p>
+                        </div>
+                        <div class="data">
+                            <div class="box" style="background: #1E9770;"></div>
+                            <p id="femalePercentageId">loading...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Total Household -->
+        <div class="col-md-4">
+            <div class="my-card card-padding">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h3 class="my-card-title">Total Household</h3>
+                        <p class="common-tk" id="totalHouseholdId">loading...</p>
+                    </div>
+                    <div class="col-md-4 text-right">
+
+                        <svg width="57" height="57" viewBox="0 0 57 57" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect width="57" height="57" rx="28.5" fill="#DCF0FA" />
+                            <path d="M41.625 27.0416H35.8792C35.7776 27.0278 35.6746 27.0278 35.5729 27.0416H35.325C35.2488 27.0851 35.1757 27.1338 35.1063 27.1874C35.0251 27.241 34.9472 27.2995 34.8729 27.3624C34.8243 27.422 34.7804 27.4854 34.7417 27.552C34.6749 27.6439 34.6163 27.7415 34.5667 27.8437L32.2334 34.2749L26.1521 17.7957C26.0499 17.5142 25.8635 17.271 25.6183 17.0991C25.373 16.9272 25.0808 16.835 24.7813 16.835C24.4818 16.835 24.1895 16.9272 23.9443 17.0991C23.699 17.271 23.5126 17.5142 23.4104 17.7957L20.0417 27.0416H15.375C14.9882 27.0416 14.6173 27.1952 14.3438 27.4687C14.0703 27.7422 13.9167 28.1131 13.9167 28.4999C13.9167 28.8867 14.0703 29.2576 14.3438 29.5311C14.6173 29.8046 14.9882 29.9582 15.375 29.9582H21.0917H21.4271H21.6459C21.7287 29.9183 21.807 29.8694 21.8792 29.8124C21.9604 29.7588 22.0383 29.7004 22.1125 29.6374L22.2438 29.4478C22.3133 29.3578 22.372 29.2599 22.4188 29.1562L24.7813 22.5499L30.8479 39.2041C30.9498 39.4859 31.1361 39.7295 31.3814 39.9018C31.6267 40.074 31.9191 40.1665 32.2188 40.1666C32.5185 40.1665 32.8109 40.074 33.0562 39.9018C33.3014 39.7295 33.4877 39.4859 33.5896 39.2041L36.9438 29.9582H41.625C42.0118 29.9582 42.3827 29.8046 42.6562 29.5311C42.9297 29.2576 43.0834 28.8867 43.0834 28.4999C43.0834 28.1131 42.9297 27.7422 42.6562 27.4687C42.3827 27.1952 42.0118 27.0416 41.625 27.0416Z" fill="#54B9D4" />
+                        </svg>
+
+                    </div>
+                </div>
+                <div class="common-data">
+                    <div class="data">
+                        <div class="box" style="background: #1E9770;"></div>
+                        <p id="onePerId" class="totalHouseholdPer">loading...</p>
+                    </div>
+                    <div class="data">
+                        <div class="box" style="background: #1E9770;"></div>
+                        <p id="twoPerId" class="totalHouseholdPer">loading...</p>
+                    </div>
+                    <div class="data">
+                        <div class="box" style="background: #1E9770;"></div>
+                        <p id="threePerId" class="totalHouseholdPer">loading...</p>
+                    </div>
+                    <div class="data">
+                        <div class="box" style="background: #1E9770;"></div>
+                        <p id="fourPerId" class="totalHouseholdPer">loading...</p>
+                    </div>
+                    <div class="data">
+                        <div class="box" style="background: #1E9770;"></div>
+                        <p id="fivePerId" class="totalHouseholdPer">loading...</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4">
+        <!-- Budget Expense -->
+        <div class="col-md-4" style="max-height: 492px;overflow: hidden;">
+            <div class="my-card card-padding" id="budget-expense">
+                <div>
+                    <h3 class="my-card-title">Total Budget & Expense</h3>
+                </div>
+                <div>
+                    <canvas width="216" height="216" id="budget-expense-chart" />
+                </div>
+                <div class="chart-label-wrapper">
+                    <div class="chart-label">
+                        <div class="cirkle" style="background-color: #FF4842;"></div>
+                        <p>Expense <span id="expensePercentage"></span>%</p>
+                    </div>
+                    <div class="chart-label">
+                        <div class="cirkle" style="background-color: #3FA7DF;"></div>
+                        <p>Budget <span id="budgetPercentage"></span>%</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Project Progress -->
+        <div class="col-md-8" style="max-height: 492px;overflow: hidden;">
+            <div class="my-card card-padding" id="project-progress">
+                <div class="d-flex justify-content-between">
+                    <h3 class="my-card-title">Project Progress - Division Wise</h3>
+                        <div class="d-flex justify-content-end">
+                            <select class="form-control mr-2" id="TransactionFromToDate" disabled>
+                                <option>Select Date</option>
+                            </select>
+                            @Html.DropDownList("FinancialYearId", null, "Select Financial Year", htmlAttributes: new { @class = "form-control", @style="width: max-content;", @required = "required", @id = "ProjectProgressFinancialYearId" })
+                        </div>
+                    </div>
+                <div class="mt-2">
+                    <canvas width="612" height="280" id="project-progress-chart" />
+                </div>
+                <div class="chart-label-wrapper" id="project-progress-wrapper">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row mt-4" style="display: none;">
+    </div>
+
+	<div class="row mt-4">
+		<!-- Energy Condition -->
+		<div class="col-md-6" style="display: none;">
+			<div class="card-padding my-card" id="energy-condition">
+				<div>
+					<h3 class="my-card-title">Energy Condition</h3>
+					<p style="font-size: 15px;">
+						<span style="color: #ff9a00;font-size: 16px;margin-right: 5px;">☢</span>
+						<span style="color: #855CF8;">Beneficiaries</span>
+					</p>
+				</div>
+				<div class="chart" style="line-height: 0px;">
+					<div class="single-chart" style="max-height:none">
+						<div class="energy-chart-body" style="" id="oneEnergyNameId">loading...</div>
+						<div class="energy-label" id="oneEnergyPerId">loading...</div>
+					</div>
+					<div class="single-chart" style="max-height:none">
+						<div class="energy-chart-body" style="" id="twoEnergyNameId">loading...</div>
+						<div class="energy-label" id="twoEnergyPerId">loading...</div>
+					</div>
+					<div class="single-chart" style="max-height:none">
+						<div class="energy-chart-body" style="" id="threeEnergyNameId">loading...</div>
+						<div class="energy-label" id="threeEnergyPerId">loading...</div>
+					</div>
+					<div class="single-chart" style="max-height:none">
+						<div class="energy-chart-body" style="" id="fourEnergyNameId">loading...</div>
+						<div class="energy-label" id="fourEnergyPerId">loading...</div>
+					</div>
+					<div class="single-chart" style="max-height:none">
+						<div class="energy-chart-body" style="" id="fiveEnergyNameId">loading...</div>
+						<div class="energy-label" id="fiveEnergyPerId">loading...</div>
+					</div>
+					<div class="single-chart" style="max-height:none">
+						<div class="energy-chart-body" style="" id="sixEnergyNameId">loading...</div>
+						<div class="energy-label" id="sixEnergyPerId">loading...</div>
+					</div>
+					<div class="single-chart" style="max-height:none">
+						<div class="energy-chart-body" style="" id="sevenEnergyNameId">loading...</div>
+						<div class="energy-label" id="sevenEnergyPerId">loading...</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<!-- Loan status -->
+		<div class="col-md-6">
+			<div class="my-card card-padding">
+				<div class="d-flex justify-content-between">
+					<h3 class="my-card-title">Loan Status Overview(in %)</h3>
+				</div>
+				<div class="mt-2">
+					<canvas width="612" height="280" id="bad-loan-chart" />
+				</div>
+			</div>
+		</div>
+
+		<script>
+			let badLoanChart = null;
+
+			$(document).ready(function () {
+				const data = {
+					labels: ['Regular', 'Under Observation', 'Inferior Loan', 'Suspicious Loan', 'Bad Loan'],
+					datasets: [
+						{
+							label: 'Loan status overview',
+							data: [60, 15, 10, 10, 5],
+							backgroundColor: [
+								'#00AB55',
+								'blue',
+								'red',
+								'orange',
+								'purple',
+							],
+							barThickness: 60,
+							barPercentage: 0.5,
+							borderRadius: 12,
+						},
+					],
+				};
+				const config = {
+					type: 'bar',
+					data: data,
+					options: {
+						maintainAspectRatio: false,
+						scales: {
+							x: {
+								min: 0,
+								max: 5,
+							},
+							y: {
+								beginAtZero: true
+							},
+						},
+						plugins: {
+							legend: {
+								display: false
+							},
+						},
+					},
+				};
+				badLoanChart = new Chart(
+					document.getElementById("bad-loan-chart"),
+					config
+				);
+			});
+		</script>
+
+		<div class="col-md-6">
+			<div class="my-card card-padding-y" id="event">
+				<div class="row card-padding-x">
+					<div class="col-md-6">
+						<h3 class="my-card-title">Community Training (Event)</h3>
+						<p style="font-size: 12px; color: #9FA2B4; line-height: 16px;">&nbsp;</p>
+					</div>
+					<div class="col-md-6 text-right">
+						<a style="font-size: 12px;" href="/CommunityTraining">View All</a>
+					</div>
+				</div>
+				<div class="card-padding-x border-top event-list" id="eventParentId" style="overflow-y: scroll;height: 400px !important;">
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="row mt-4">
+		<!-- Meeting -->
+		<div class="col-md-6">
+			<div class="card-padding my-card" id="meeting">
+				<div class="d-flex justify-content-between">
+					<h3 class="my-card-title">Meeting</h3>
+				</div>
+				<div id="MeetingList" class="nicescroll-cursors mt-2" style="overflow-y: scroll;">
+					<table class="table table-bordered table-sm">
+						<thead>
+							<tr>
+								<th scope="col" class="text-center">#</th>
+								<th scope="col">Title</th>
+								<th scope="col">Date</th>
+								<th scope="col">Start Time</th>
+								<th scope="col">End Time</th>
+							</tr>
+						</thead>
+						<tbody id="showMeeting">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+
+		<!-- Departmental Training -->
+		<div class="col-md-6">
+			<div class="card-padding my-card" id="departmental-training">
+				<div class="d-flex justify-content-between">
+					<h3 class="my-card-title">Departmental Training</h3>
+					@Html.DropDownList("FinancialYearId", null, "Select Financial Year", htmlAttributes: new { @class = "form-control", @style="width: max-content;", @required = "required", @id = "DepartmentalFinancialYearId" })
+				</div>
+				<div id="DepartmentalTrainingList" class="mt-2" style="overflow-y: scroll;">
+					<table class="table table-bordered table-sm">
+						<thead>
+							<tr>
+								<th scope="col" class="text-center">#</th>
+								<th scope="col">Title</th>
+								<th scope="col">Total</th>
+								<th scope="col">Male</th>
+								<th scope="col">Female</th>
+							</tr>
+						</thead>
+						<tbody id="showDataDept">
+						</tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <script>
+        $(document).ready(function () {
+            $("#DepartmentalFinancialYearId").trigger("change");
+        })
+        $("#DepartmentalFinancialYearId").on("change", function () {
+            var financialYearId = $(this).val();
+
+            if (financialYearId) {
+                $.ajax({
+                    cache: false,
+                    type: "GET",
+                    url: `/DepartmentalTraining/GetByFilter`,
+                    data: { "financialYearId": financialYearId },
+                    success: function (result) {
+                        console.log(result.Data);
+
+                        if (Array.isArray(result.Data)) {
+                            $("#showDataDept").empty();
+
+                            result.Data.forEach(function (training, index) {
+                                $("#showDataDept").append(`
+                                                        <tr>
+                                                            <th scope="row" class="text-center index">${index + 1}</th>
+                                                            <td>${training.TrainingTitle}</td>
+                                                            <td>${training.TotalMembers}</td>
+                                                            <td>${training.TotalMale}</td>
+                                                            <td>${training.TotalFemale}</td>
+                                                        </tr>
+                                `);
+                            })
+                        }
+                    },
+                    error: function (xhr, ajaxOptions, thrownError) {
+                        //
+                    }
+                });
+            }
+        });
+    </script>
+</div>
+
+<!-- Monthly Record Doughnut -->
+<script>
+    let monthlyExpenseChart = null;
+
+	$(document).ready(function () {
+		const data = {
+			labels: [
+				'T',
+				'E',
+			],
+			datasets: [{
+				label: 'Monthly progress',
+				data: [0, 0],
+				backgroundColor: [
+					'rgba(63, 167, 223, 0.2)',
+					'#3FA7DF',
+				],
+				hoverOffset: 4,
+				borderWidth: 0,
+			}]
+		};
+		const config = {
+			type: 'doughnut',
+			data: data,
+			options: {
+				radius: '80%',
+				cutout: '75%',
+				plugins: {
+					legend: {
+						display: false
+					},
+				},
+                aspectRatio: 1,
+			},
+			animation: {
+				animateRotate: false,
+			}
+		};
+		monthlyExpenseChart = new Chart(
+			document.getElementById("monthly-record-circle-chart"),
+			config
+		);
+	});
+</script>
+
+<!-- Budget & Expense -->
+<script>
+    let budgetExpenseChart = null;
+
+    $(document).ready(function () {
+        const data = {
+            labels: [
+                'Budget',
+                'Expense',
+            ],
+            datasets: [{
+                data: [67, 33],
+                backgroundColor: [
+                    '#3FA7DF',
+                    '#FF4842',
+                ],
+                hoverOffset: 4,
+                borderWidth: 0,
+            }]
+        };
+        const config = {
+            type: 'doughnut',
+            data: data,
+            options: {
+                radius: '75%',
+                cutout: '55%',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    label: {
+                        render: 'percentage',
+                        fontColor: '#fff',
+                        position: 'border',
+                        textMargin: 6
+                    }
+                },
+                aspectRatio: 1,
+            },
+            animation: {
+                animateRotate: false,
+            }
+        };
+        budgetExpenseChart = new Chart(
+            document.getElementById("budget-expense-chart"),
+            config
+        );
+
+        $.ajax({
+            cache: false,
+            type: "GET",
+            url: "/Home/GetTotalExpenseTarget",
+            success: function (data) {
+                $("#TotalExpenditure").text(addCommas(data.TotalProjectExpense));
+                $("#TotalTarget").text(addCommas(data.TotalProjectTarget));
+
+                var expenses = Math.round((data.TotalProjectExpense / data.TotalProjectTarget) * 100);
+                var budget = Math.round(((data.TotalProjectTarget - data.TotalProjectExpense) / data.TotalProjectTarget) * 100);
+
+                $("#expensePercentage").text(expenses);
+                $("#budgetPercentage").text(budget);
+
+                budgetExpenseChart.data.datasets[0].data = [data?.TotalProjectTarget ?? 0, data?.TotalProjectExpense ?? 0];
+                budgetExpenseChart.update();
+
+                $("#monthly-record-chart-label").text(data.MonthlyExpensePercentage + "%");
+
+                monthlyExpenseChart.data.datasets[0].data = [100 - data?.MonthlyExpensePercentage ?? 0, data?.MonthlyExpensePercentage ?? 0];
+                monthlyExpenseChart.update();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+            }
+        });
+    })
+</script>
+
+<!-- Project Progress - Divison Wise -->
+<script>
+    let project_progress_chart = null;
+
+    $(document).ready(function () {
+        const data = {
+            labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+            datasets: [
+                {
+                    data: [],
+                    backgroundColor: [
+                    ],
+                    barThickness: 18,
+                    barPercentage: 0.5,
+                    categoryPercentage: 0.9,
+                    borderRadius: 12,
+                },
+                {
+                    data: [],
+                    backgroundColor: [
+                    ],
+                    barThickness: 18,
+                    barPercentage: 0.5,
+                    categoryPercentage: 0.9,
+                    borderRadius: 12,
+                },
+                {
+                    data: [],
+                    backgroundColor: [
+                    ],
+                    barThickness: 18,
+                    barPercentage: 0.5,
+                    categoryPercentage: 0.9,
+                    borderRadius: 12,
+                },
+            ],
+        };
+        const config = {
+            type: 'bar',
+            data: data,
+            options: {
+                scales: {
+                    x: {
+                        min: 0,
+                        max: 2,
+                    },
+                    y: {
+                        beginAtZero: true
+                    },
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                },
+            },
+        };
+        project_progress_chart = new Chart(
+            document.getElementById("project-progress-chart"),
+            config
+        );
+        //chart.options.animation = false;
+        project_progress_chart.canvas.addEventListener("wheel", function (e) {
+            e.preventDefault();
+
+            if (e.deltaY > 0) {
+                if (project_progress_chart.config.options.scales.x.min < 9)
+                    project_progress_chart.config.options.scales.x.min += 1;
+                if (project_progress_chart.config.options.scales.x.max < 11)
+                    project_progress_chart.config.options.scales.x.max += 1;
+            } else if (e.deltaY < 0) {
+                if (project_progress_chart.config.options.scales.x.min > 0)
+                    project_progress_chart.config.options.scales.x.min -= 1;
+                if (project_progress_chart.config.options.scales.x.max > 2)
+                    project_progress_chart.config.options.scales.x.max -= 1;
+            }
+            project_progress_chart.update();
+        });
+    });
+</script>
+
+<!-- GetTotalFcvVcfAndExecutiveSubExecutive  -->
+<script>
+    function getFilterDataIds() {
+        return {
+            ForestCircleId: $("select[name=ForestCircleId]").val(),
+            ForestDivisionId: $("select[name=ForestDivisionId]").val(),
+            ForestRangeId: $("select[name=ForestRangeId]").val(),
+            ForestBeatId: $("select[name=ForestBeatId]").val(),
+            ForestFcvVcfId: $("select[name=ForestFcvVcfId]").val(),
+            DivisionId: $("select[name=DivisionId]").val(),
+            DistrictId: $("select[name=DistrictId]").val(),
+            UpazillaId: $("select[name=UpazillaId]").val(),
+            UnionId: $("select[name=UnionId]").val(),
+        };
+    }
+    //var FcvId = $("#FcvId").val();
+    // var OfficeBearersId = $("#OfficeBearersId");
+    function LoadGetTotalFcvVcfAndExecutiveSubExecutive() {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Home/GetTotalFcvVcfAndExecutiveSubExecutive",
+            data: getFilterDataIds(),
+            success: function (data) {
+                //$(".loader").fadeOut("slow");
+                $("#totalFcvVcvId").text(data.TotalFcvVcf);
+                $("#executiveCommitteeMemberId").text("Executive Committee Members " + data.TotalExEcutiveMember);
+                $("#subExecutiveCommitteeMemberId").text("Sub Executive Committee Members " + data.TotalSubEcutiveMember);
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                //alert('Failed to retrieve data.');
+            }
+        });
+    }
+
+    // Total Beneficiary
+    function LoadGetTotalBeneficiary() {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Home/GetTotalBeneficiary",
+            data: getFilterDataIds(),
+            success: function (data) {
+                //$(".loader").fadeOut("slow");
+                $("#totalBeneficiaryId").text(data.TotalBeneficiary);
+                $("#malePercentageId").text(data.TotalMalePercentage + "% Male");
+                $("#femalePercentageId").text(data.TotalFemalePercentage + "% Female");
+                $("#totalGotTrainig").text(data.TotalGotTrainingPercentage);
+
+                $("#totalGotLoanPercentage").text(data.TotalGotLoanPercentage);
+                $("#TotalLoanRepaymentPercentage").text(data.TotalLoanRepaymentPercentage);
+                $("#TotalEvilWealthPercentage").text(data.TotalEvilWealthPercentage);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                //alert('Failed to retrieve data.');
+            }
+        });
+    }
+
+    function LoadLoanStatusOverview() {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Home/LoanStatusOverview",
+            data: getFilterDataIds(),
+            success: function (data) {
+                badLoanChart.data.datasets[0].data = [
+                    data?.RegularPercentage ?? 0,
+                    data?.UnderObservationPercentage ?? 0,
+                    data?.InferiorWealthPercentage ?? 0,
+                    data?.SuspiciousWealthPercentage ?? 0,
+                    data?.EvilWealthPercentage ?? 0,
+                ];
+                badLoanChart.update();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+            }
+        });
+    }
+
+    // Total Household With Percentage
+    function LoadTotalHouseholdWithPercentage() {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Home/TotalHouseholdWithPercentage",
+            data: getFilterDataIds(),
+            success: function (data) {
+                $("#totalHouseholdId").text(data.TotalHouseholdMember);
+                var HouseConditionPercentages = data.HouseConditionPercentages;
+
+                if (HouseConditionPercentages) {
+                    $("#onePerId").text(HouseConditionPercentages[0].Percentage + "% " + HouseConditionPercentages[0].HouseTypeName);
+                    $("#twoPerId").text(HouseConditionPercentages[1].Percentage + "% " + HouseConditionPercentages[1].HouseTypeName);
+                    $("#threePerId").text(HouseConditionPercentages[2].Percentage + "% " + HouseConditionPercentages[2].HouseTypeName);
+                    $("#fourPerId").text(HouseConditionPercentages[3].Percentage + "% " + HouseConditionPercentages[3].HouseTypeName);
+                    $("#fivePerId").text(HouseConditionPercentages[4].Percentage + "% " + HouseConditionPercentages[4].HouseTypeName);
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+            }
+        });
+    }
+
+    // Get Energy Uses Percentage
+    function LoadGetEnergyUsesPercentage() {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Home/GetEnergyUsesPercentage",
+            data: getFilterDataIds(),
+            success: function (data) {
+
+                $("#oneEnergyNameId").text(data[0].EnergyTypeName);
+                $("#oneEnergyPerId").text(data[0].Percentage + "%");
+
+                $("#twoEnergyNameId").text(data[1].EnergyTypeName);
+                $("#twoEnergyPerId").text(data[1].Percentage + "%");
+
+                $("#threeEnergyNameId").text(data[2].EnergyTypeName);
+                $("#threeEnergyPerId").text(data[2].Percentage + "%");
+
+                $("#fourEnergyNameId").text(data[3].EnergyTypeName);
+                $("#fourEnergyPerId").text(data[3].Percentage + "%");
+
+                $("#fiveEnergyNameId").text(data[4].EnergyTypeName);
+                $("#fiveEnergyPerId").text(data[4].Percentage + "%");
+
+                $("#sixEnergyNameId").text(data[5].EnergyTypeName);
+                $("#sixEnergyPerId").text(data[5].Percentage + "%");
+
+                $("#sevenEnergyNameId").text(data[6].EnergyTypeName);
+                $("#sevenEnergyPerId").text(data[6].Percentage + "%");
+
+                //alert(data[0].EnergyTypeName);
+                // $("#femalePercentageId").text(data.TotalFemalePercentage + " Female");
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                //alert('Failed to retrieve data.');
+            }
+        });
+    }
+
+    // Meeting
+    function LoadMeetings() {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Home/GetMeetingByFilter",
+            data: getFilterDataIds(),
+            success: function (data) {
+                $("#showMeeting").empty();
+
+                if (Array.isArray(data)) {
+                    data.forEach((meeting, index) => {
+                        var startTime = new Date(meeting.StartTime);
+                        var endTime = new Date(meeting.EndTime);
+
+                        $("#showMeeting").append(
+                            `
+                            <tr>
+                                <td>${index + 1}</td>
+                                <td>${meeting.MeetingTitle}</td>
+                                <td>${new Date(meeting.MeetingDate).toDateString()}</td>
+                                <td>${startTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</td>
+                                <td>${endTime.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true })}</td>
+                            </tr>
+                            `
+                        );
+                    })
+                }
+            },
+            error: function () {
+                //
+            }
+        });
+    }
+
+    function loadAllDashboardData() {
+        LoadGetEnergyUsesPercentage();
+        LoadTotalHouseholdWithPercentage();
+        LoadGetTotalBeneficiary();
+        LoadGetTotalFcvVcfAndExecutiveSubExecutive();
+        LoadGetCommunityTrainingList();
+        LoadMeetings();
+        LoadLoanStatusOverview();
+    }
+    loadAllDashboardData();
+
+    $("#FilterDataSearch").on("click", function() {
+        loadAllDashboardData();
+    });
+
+    function getCurrencyFormat(curr) {
+        var number = Number.parseInt(curr);
+
+        var isNan = Number.isNaN(number);
+
+        return new Intl.NumberFormat('bn-BD', { style: 'currency', currency: 'BDT' }).format(isNan ? 0 :number);
+    }
+    function addCommas(x) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    // Get Community Training List
+    function LoadGetCommunityTrainingList() {
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Home/GetCommunityTrainingList",
+            data: getFilterDataIds(),
+            success: function (myData) {
+                $("#eventParentId").empty();
+                for (var i in myData) {
+                    $("#eventParentId").append('<div class="single-event" style="padding-bottom: 10px;">' + '<div class="mylabel">' + '<i class="fa fa-chevron-right mr-1" style="color: gray; font-weight: bold; font-size: 12px;" aria-hidden="true"></i>' + '<div>' + myData[i].TrainingTitle + '</div>' + '</div >' + '<div class="event-badge event-badge-urgent">' + Date(myData[i].StartDate).slice(0, 15) + '</div>' + '</div>');
+                }
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                //alert('Failed to retrieve data.');
+            }
+        });
+    }
+</script>
+
+<script>
+	$(document).ready(function() {
+		$("#ProjectProgressFinancialYearId").trigger("change");
+	});
+
+    $("#ProjectProgressFinancialYearId").on("change", function() {
+        var value = $(this).val();
+        var dates = $("#TransactionFromToDate");
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Transaction/ListDate",
+            data: { financialYearId: value },
+            success: function (data) {
+                dates.html('<option value="">Choose..</option>');
+                $.each(data.Data, function (id, option) {
+                    dates.append($('<option></option>').val(option.Id).html(option.FromToDate));
+                });
+                dates.prop("disabled", false);
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+            }
+        });
+    });
+
+    function getBarChartData(transaction) {
+        const colors = [
+            'red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet'
+        ];
+        function getColor(index) {
+            if (colors[index]) return colors[index];
+            else return 'black';
+        }
+        $("#project-progress-wrapper").empty();
+
+        return transaction.TransactionDetails.map(function (details) {
+            const expenses = new Array(13).fill(0);
+
+            details.TransactionExpenses.map((e) => {
+                expenses[e.ExpenseMonth] = e.ExpenseAmount
+            })
+            expenses.shift();
+
+            const color = getColor(details.FundTypeId);
+
+            $("#project-progress-wrapper").append(`
+                <div class="chart-label">
+                    <div class="cirkle" style="background-color: ${color};"></div>
+                    <p>${details.FundType?.Name}</p>
+                </div>
+            `);
+
+            return {
+                label: details.FundType?.Name,
+                data: expenses,
+                backgroundColor: [
+                    color
+                ],
+                barThickness: 18,
+                barPercentage: 0.5,
+                borderRadius: 12,
+            }
+        })
+    }
+
+    $("#TransactionFromToDate").on("change", function () {
+        var value = $(this).val();
+
+        $.ajax({
+            cache: false,
+            type: "POST",
+            url: "/Transaction/GetDetails",
+            data: { id: value },
+            success: function (data) {
+                project_progress_chart.data.datasets = getBarChartData(data.Data);
+                project_progress_chart.update();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+            }
+        });
+    })
+</script>

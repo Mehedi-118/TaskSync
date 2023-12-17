@@ -1,0 +1,85 @@
+*{
+    margin:0;
+    padding:0;
+    box-sizing: border-box;
+}
+.navbar{
+    width: 255px;
+    /* background-color: rgb(34, 5, 63); */
+    height: 100vh;
+    margin-left: -255px;
+    position: fixed;
+    transition: 1.5s;
+    
+    
+}
+/* .nav-link:active, */
+/* .nav-link:focus, */
+.nav-link:hover{
+    background-color: rgba(94, 39, 139, 0.849);
+    font-size: 1.2rem;
+    color: antiquewhite;
+}
+
+.active-nav {
+    margin-left: 0;
+}
+
+
+/* for main section */
+
+.active-cont {
+    margin-left: 260px;
+    margin-right: 10px;
+}
+#menu-btn {
+    background-color: #7952b3;
+    color: #fff;
+}
+
+#menu-btn:focus {
+    box-shadow: 0 0 0 0.25rem #7952b344;
+}
+.my-container {
+    transition: 1.5s;
+
+
+}
+.container {
+    height: 100%;
+    overflow-wrap: break-word;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    border-radius: 20px;
+    background-color: rgba(134, 134, 134, 0.212);
+}
+#stat{
+    
+border: solid gray;
+}
+.col-sm-12.col-md-5.col-12 {
+    display:flex;
+    /*float: right;*/
+    justify-content: center;
+    align-items: center;
+}
+#dashBoard .card {
+    border-radius: 2em;
+    text-align: center;
+    box-shadow: 0 5px 10px rgba(0,0,0,.2);
+    width: 15rem;
+    margin:auto;
+}
+#dashBoard .card img{
+    width: 30%;
+}
+#userProfile li{
+   list-style: none;
+}
+#brandLogo img{
+    /* background-color: white; */
+    border-radius: 50%;
+    margin-left:15px;
+    /* border: 2px solid red; */
+    
+    
+}

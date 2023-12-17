@@ -1,0 +1,18 @@
+﻿#calendar {
+    background-color: #405e77;
+    height: 460px;
+    width: 100%;
+}
+
+    #calendar a {
+        color: #FFFFBD;
+    }
+
+    #calendar .fc-daygrid-day.fc-day-today {
+        background-color: #775940;
+    }
+
+    #calendar .fc-daygrid-day.fc-day-past {
+        background-color: #77405E;
+    }
+}

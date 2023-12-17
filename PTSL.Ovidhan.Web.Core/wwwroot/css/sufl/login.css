@@ -1,0 +1,204 @@
+﻿/* inter-regular - latin */
+@font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 400;
+	src: local(''), url('/fonts/inter/inter-v12-latin-regular.woff2') format('woff2'),
+	url('/fonts/inter/inter-v12-latin-regular.woff') format('woff');
+}
+/* inter-500 - latin */
+@font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 500;
+	src: local(''), url('/fonts/inter/inter-v12-latin-500.woff2') format('woff2'),
+	url('/fonts/inter/inter-v12-latin-500.woff') format('woff');
+}
+/* inter-600 - latin */
+@font-face {
+	font-family: 'Inter';
+	font-style: normal;
+	font-weight: 600;
+	src: local(''), url('/fonts/inter/inter-v12-latin-600.woff2') format('woff2'),
+	url('/fonts/inter/inter-v12-latin-600.woff') format('woff');
+}
+
+:root {
+	--color-green: #ABEBC6;
+	--color-green-light: #E3F3E3;
+	--color-green-dark: #058527;
+	--text-color: #212F3D;
+	--text-color-light: #404040;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	color: var(--text-color);
+	background-color: var(--color-green);
+	font-family: 'Inter';
+}
+
+.swiper-button-prev {
+	color: var(--color-green-light) !important;
+}
+.swiper-button-next {
+	color: var(--color-green-light) !important;
+}
+.swiper-pagination-bullet {
+	border: 1px solid var(--color-green-light);
+	background: var(--color-green-light) !important;
+	opacity: 0.6 !important;
+}
+.swiper-pagination-bullet-active {
+	width: 100px !important;
+	border-radius: 4px !important;
+	opacity: 1 !important;
+}
+
+#header {
+	color: var(--text-color-light);
+	background-color: var(--color-green-light);
+	padding: 20px 0;
+}
+#header .header-icons {
+	display: flex;
+	justify-content: space-around;
+	align-items: center;
+	padding: 12px 0;
+}
+#header .header-icons img {
+	max-width: 90px;
+	max-height: 90px;
+	/*object-fit: fill;*/
+}
+#header .header-title {
+	font-size: 25px;
+	letter-spacing: 1px;
+	text-align: center;
+}
+
+#slider .slider-images img {
+	width: 100%;
+	height: 400px;
+	object-fit: cover;
+}
+
+#module-title {
+	font-weight: 500;
+	font-size: 16px;
+	padding: 30px 0;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	gap: 20px;
+}
+#module-title img {
+	width: 60px;
+	height: 60px;
+}
+#module-title h2 {
+	font-size: 25px;
+	letter-spacing: 4px;
+}
+
+#login {
+	background-image: url("/img/login/bon.jpg");
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	padding: 60px 0;
+}
+#login .login-form {
+    width: 450px;
+    padding: 40px;
+    background: linear-gradient(118.26deg, rgba(255, 255, 255, 0.81) 7.08%, rgba(255, 255, 255, 0) 101.77%);
+    backdrop-filter: blur(14px);
+    border-radius: 7px;
+    margin: 0 5px;
+}
+#login .login-header {
+	font-size: 24px;
+	font-weight: 600;
+	letter-spacing: 3px;
+	margin-top: 10px;
+	text-align: center;
+}
+#login .login-form label {
+	display: flex;
+	flex-direction: column;
+	margin-top: 20px;
+}
+#login .login-form label span {
+	letter-spacing: 2px;
+	font-weight: 500;
+	margin-bottom: 5px;
+}
+#login .login-form label input {
+	border: 1px solid transparent;
+	outline: none;
+	width: max(200px, 100%);
+	font-size: 15px;
+	padding: 10px 8px;
+	flex-direction: column;
+}
+#login .login-form label input:focus {
+	border: 1px solid gray;
+}
+#login .login-buttons {
+	display: flex;
+	flex-direction: column;
+	margin-top: 25px;
+	gap: 10px;
+}
+#login .login-buttons button {
+	cursor: pointer;
+    font-weight: 600;
+    font-size: 18px;
+    letter-spacing: 3px;
+    color: white;
+    background-color: rgba(82, 190, 128, 1);
+    border: 0px solid transparent;
+    padding: 15px 38px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.27);
+    border-radius: 10px;
+    transition: background-color 0.5s;
+}
+#login .login-buttons button:hover {
+    background-color: rgb(80, 200, 134);
+}
+#login .login-buttons .button-wrapper {
+	display: flex;
+	justify-content: center;
+}
+#login .login-buttons a {
+	font-size: 12px;
+	opacity: 0.8;
+	color: white;
+	text-decoration: none;
+	text-align: center;
+}
+
+#about {
+	display: flex;
+	justify-content: center;
+	padding: 45px 0;
+}
+#about .about-wrapper {
+	width: 80%;
+}
+#about .about-wrapper h3 {
+	font-weight: 600;
+	letter-spacing: 2px;
+}
+#about .about-wrapper p {
+	margin-top: 25px;
+	font-size: 14px;
+	line-height: 22px;
+	text-align: justify;
+	letter-spacing: 0.5px;
+}

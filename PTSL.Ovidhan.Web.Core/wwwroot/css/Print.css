@@ -1,0 +1,31 @@
+﻿body {
+}
+@media print {
+   thead {display: table-header-group;}
+   @page {size: initial; width:100%}
+}
+/*@page {
+  size: landscape legal ;
+  margin: 0;
+}*/
+table{
+    width:100%;
+    font-family:Arial, Helvetica, sans-serif !important;
+    font-size:small !important;
+}
+td {
+    height: 50px; 
+    width:50px;
+}
+
+.cssTable td {
+    text-align:center !important; 
+    vertical-align:middle !important;
+}
+h3{
+    font-size:17px !important;
+}
+.scheme-name{
+    width:20% !important;
+    text-align:justify !important;
+}

@@ -1,0 +1,217 @@
+﻿@{
+    ViewBag.Title = "Edit";
+}
+<style>
+     select {
+        height: 30px!important;
+        line-height: 10px !important;
+        font-weight: 400 !important;
+        color: black !important;
+    }
+
+    legend {
+        font-weight: 500 !important;
+        font-size: 20px!important;
+    }
+</style>
+
+
+    <div class="card">
+
+    <div class="card-header">
+        <h4>
+            <a href="/AccessMapper/Index" class="mr-1 back">
+                <svg width="20" height="20" viewBox="0 0 32 32">
+                    <path fill="currentColor" d="m14 26l1.41-1.41L7.83 17H28v-2H7.83l7.58-7.59L14 6L4 16l10 10z" />
+                </svg>
+            </a>
+           Access Mapper Edit
+        </h4>
+        <button class="ml-auto reset btn btn-sm" onClick="window.location.reload();">
+            <svg class="rotate180z" width="16" height="16" viewBox="0 0 32 32">
+                <path d="M25.95 7.65l.005-.004c-.092-.11-.197-.206-.293-.312c-.184-.205-.367-.41-.563-.603c-.139-.136-.286-.262-.43-.391c-.183-.165-.366-.329-.558-.482c-.16-.128-.325-.247-.49-.367c-.192-.14-.385-.277-.585-.406a13.513 13.513 0 0 0-.533-.324q-.308-.179-.625-.341c-.184-.094-.37-.185-.56-.27c-.222-.1-.449-.191-.678-.28c-.19-.072-.378-.145-.571-.208c-.246-.082-.498-.15-.75-.217c-.186-.049-.368-.102-.556-.143c-.29-.063-.587-.107-.883-.15c-.16-.023-.315-.056-.476-.073A12.933 12.933 0 0 0 6 7.703V4H4v8h8v-2H6.811A10.961 10.961 0 0 1 16 5a11.111 11.111 0 0 1 1.189.067c.136.015.268.042.403.061c.25.037.501.075.746.128c.16.035.315.08.472.121c.213.057.425.114.633.183c.164.054.325.116.486.178c.193.074.384.15.57.235c.162.072.32.15.477.23q.268.136.526.286c.153.09.305.18.453.276c.168.11.33.224.492.342c.14.102.282.203.417.312c.162.13.316.268.47.406c.123.11.248.217.365.332c.167.164.323.338.479.512A10.993 10.993 0 1 1 5 16H3a13 13 0 1 0 22.95-8.35z" fill="currentColor" />
+            </svg>
+            Reset
+        </button>
+    </div>
+
+
+
+        <div class="card-body">
+
+            <div class="list-group">
+
+                <div class="list-group-item">
+                    <div class="editor-field" style="width: 400px">
+                        <label style="width: 200px">Admin User Group Name:</label>
+                        @Html.DropDownList("PmsGroupID", new SelectList(ViewBag.GroupList, "Id", "GroupName"), new { @class = "form-control col-md-6", @required = "required" })
+                    </div>
+                    <br />
+
+                </div>
+
+                <div class="list-group-item">
+                    <div class="editor-field">
+                        <input id='Checkbox' type="checkbox" /> Check All
+                        <br />
+                        <br />
+                        <div>
+                            <div id="accessBox"></div>
+                        </div>
+
+
+                    </div>
+                </div>
+                <br />
+
+            </div>
+
+            <div class="col-md-12">
+                <button type="button" id="adminUserGroupSave" class="btn btn-success btn-icon icon-left pull-right btn-sm">
+                    <i class="entypo-check">
+                    </i>Save
+                </button>
+            </div>
+        </div>
+        <hr />
+        <div class="card-header pull-left">
+           <!--<a href="/AccessMapper/Index" class="btn btn-warning">Return to Index</a>-->
+        </div>
+    </div>
+
+
+<script type="text/javascript">
+
+        //dialog box end
+
+        $(document).ready(function () {
+            $.ajax({
+                url: "/AccessMapper/AccessList",
+                type: 'GET',
+                success: function (res) {
+                    console.log(res);
+                    //alert(res);
+                    var aaa = $("#listOfValue").val();
+                    var check = 0;
+                    var strOfCheck = "";
+                    var a = 1;
+                    var rowDiv = 0;
+                    for (var i = 0; i < res.length; i++) {
+                        if (rowDiv == 0) {
+                            //alert(rowDiv + "sss");
+                            strOfCheck += "<div class='row'>";
+                        }
+
+                        if (res[i].BaseModule != check) {
+
+                            if (a != 1) {
+                                strOfCheck += "</div>";
+                                strOfCheck += "</div>";
+                                strOfCheck += "</fieldset>";
+                                strOfCheck += "</div>";
+
+                                if (rowDiv % 3 == 0) {
+                                    strOfCheck += "</div>";
+                                    strOfCheck += "<div class='row'>";
+                                    //rowDiv = 0;
+                                }
+                            }
+                            strOfCheck += "<div class='col-md-4'>";
+                            strOfCheck += "<fieldset class=''> <legend class='scheduler- border'>" + res[i].ModuleName+"</legend>";
+                            strOfCheck += "<div class='control- group'>";
+                            a++;
+                            strOfCheck += "<div class='col-md-12'>";
+                            strOfCheck += "<input id='Checkbox" + res[i].Id + "' class='Checkbox' type='checkbox' name='v' value=" + res[i].Id + ">";
+                            strOfCheck += " " + res[i].Mask + " <label> </label> <br />";
+                            check = res[i].BaseModule;
+                            rowDiv++;
+                            //alert(rowDiv);
+                        }
+                        else {
+                            strOfCheck += "<input id='Checkbox" + res[i].Id + "' class='Checkbox' type='checkbox' name='v' value=" + res[i].Id + ">";
+                            strOfCheck += " " + res[i].Mask + " <label> </label> <br />";
+                            check = res[i].BaseModule;
+                        }
+                    }
+                    strOfCheck += "</div>";
+                    //console.log(strOfCheck);
+                    $("#accessBox").append(strOfCheck);
+                   
+                    $.ajax({
+                        url: "/AccessMapper/AccessListById",
+                        type: 'GET',
+                        data: { id: id },
+                        success: function (res) {
+                            //console.log(res);
+                            //alert(res);
+                            for (var j = 0; j < res.length; j++) {
+                                var varaibleId = "#Checkbox" + res[j].Id;
+                                $(varaibleId).prop('checked', true);
+                                //$('#Checkbox'+aaa[j].accessID).not(this).prop('checked', this.checked);
+                            }
+                        }
+                    });
+
+                }
+            });
+            var id = @ViewBag.Id;
+
+
+            $("#Checkbox").click(function () {
+                $('input:checkbox').not(this).prop('checked', this.checked);
+            });
+            $('#adminUserGroupSave').click(function () {
+
+                if ($('#PmsGroupID').val() === '') {
+                    //bootbox.alert({
+                    //    size: 'small',
+                    //    message: "name can not be empty!"
+                    //});
+                    return false;
+                } else {
+                    var userGroupname = $('#PmsGroupID').val();
+                    var isActive = 1; // default value active
+
+                    var moduleActionName = $('.Checkbox:checked').map(function () { return this.value; }).get().join(',');
+
+                    var accessMapperViewModel = {
+                        Id: id,
+                        AccessList: moduleActionName
+                    };
+                    if (moduleActionName.length <= 0) {
+                        //swal("No Access Selected");
+                        sweetAlert("No Access Selected...", "You must select at least one access !!!", "warning");
+                        //alert("No Access Selected")
+                        return false;
+                    }
+                    console.log(accessMapperViewModel);
+
+                    $.ajax({
+                        data: accessMapperViewModel,
+                        url: '/AccessMapper/Edit',
+                        method: 'POST', 
+                        dataType: 'json',
+                        success: function (result) { 
+                            var message = result.Message;
+                            var executionState = result.executionState;
+                            if (executionState != null) {
+                                swal(message);
+                                $(".confirm").on('click', function () {
+                                    window.location.href = "/AccessMapper/Index";
+                                });
+                            }
+                        },
+                        error: function (error) {
+                            //bootbox.alert({
+                            //    size: 'small',
+                            //    message: "error!!!"
+                            //});
+                        }
+                    }); //ajax call ends here
+
+                } // else ends here
+
+            });
+
+        }); //document ready ends here
+</script>

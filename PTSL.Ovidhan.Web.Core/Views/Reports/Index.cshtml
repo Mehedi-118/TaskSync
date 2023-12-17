@@ -1,0 +1,136 @@
+﻿@{
+    ViewBag.Title = "Reports";
+}
+
+<style>
+    .report_card {
+    }
+
+    .divider {
+        border: 1px solid #eee;
+        margin: 10px 0;
+    }
+    fieldset {
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        padding: 5px 15px;
+    }
+    fieldset legend {
+        width: max-content;
+    }
+</style>
+
+<div class="card">
+    <div class="card-header">
+        <h4>
+            Reports
+        </h4>
+    </div>
+
+    <div class="card-body">
+        <fieldset>
+            <legend>Collaborative Forest Management (CFM)</legend>
+
+            <div class="report_card">
+                <h6 class="mb-3">CIP</h6>
+                1. <a href="/Reports/CipReportFilter">CIP Report</a>
+            </div>
+            <div class="divider"></div>
+
+            <div class="report_card">
+                <h6 class="mb-3">Beneficiary</h6>
+                1. <a href="/Reports/BeneficiaryReportFilter">Beneficiary Report</a>
+            </div>
+            <div class="divider"></div>
+
+            <div class="report_card">
+                <h6 class="mb-3">Executive Committee</h6>
+                <div>
+                    <div>1. <a href="/Reports/ExecutiveCommitteeReportFilter">Executive Committee Report</a></div>
+                </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="report_card">
+                <h6 class="mb-3">Meeting</h6>
+                1. <a href="/Reports/MeetingReportFilter">Meeting Report</a>
+            </div>
+            <div class="divider"></div>
+
+            <div class="report_card">
+                <h6 class="mb-3">Savings</h6>
+                1. <a href="/Reports/BeneficiarySavingsReportFilter">Beneficiary Savings Report</a>
+            </div>
+            <div class="divider"></div>
+
+            <div class="report_card">
+                <h6 class="mb-3">Transaction</h6>
+                1. <a href="/Reports/TransactionReportFilter">Transaction Report</a>
+            </div>
+            <div class="divider"></div>
+
+            <div class="report_card">
+                <h6 class="mb-3">Patrolling Schedule</h6>
+                1. <a href="/Reports/PatrollingScheduleReportFilter">Patrolling Schedule Report</a>
+            </div>
+        </fieldset>
+
+        <fieldset class="mt-2">
+            <legend>Capacity Development</legend>
+            <div class="report_card">
+                <div>
+                    <div>1. <a href="/Reports/CommunityTrainingReportFilter">Community Training Report</a></div>
+                    <div>2. <a href="/Reports/DepartmentalTrainingReportFilter">Departmental Training Report</a></div>
+                    <div>3. <a href="/Reports/BeneficiaryTrainingReportFilter">Beneficiary Training Report</a></div>
+                </div>
+            </div>
+        </fieldset>
+
+        <fieldset class="mt-2">
+            <legend>Social Forestry</legend>
+            <div class="report_card">
+                <h6 class="mb-3">New Raised Plantation</h6>
+                <div>
+                    <div>1. <a href="/Reports/NewRaisedPlantationReportFilter">New Raised Plantation Report</a></div>
+                </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="report_card">
+                <h6 class="mb-3">Feeling / Cutting</h6>
+                <div>
+                    <div>1. <a href="/Reports/CuttingPlantationReportFilter">Feeling / Cutting Report</a></div>
+                </div>
+            </div>
+            <div class="divider"></div>
+
+            <div class="report_card">
+                <h6 class="mb-3">Reforestation</h6>
+                <div>
+                    <div>1. <a href="/Reports/ReforestationReportFilter">Reforestation Report</a></div>
+                </div>
+            </div>
+            <div class="divider"></div>
+        </fieldset>
+
+        <fieldset class="mt-2">
+            <legend>Community Livelihoods</legend>
+            <h6 class="mb-3">AIG Report</h6>
+            <div>
+                <div>1. <a href="/Reports/AigBasicInformationReportFilter">AIG Basic Information Report</a></div>
+                <div>2. <a href="/Reports/RepaymentReportFilter">Repayment Report</a></div>
+                <div>3. <a href="/Reports/BeneficiaryWiseRepaymentProgressReportFilter">Beneficiary Wise Progress Report</a></div>
+            </div>
+        </fieldset>
+
+        <fieldset>
+            <legend>Labour Database</legend>
+            <div class="report_card">
+                <h6 class="mb-3">Labour Database</h6>
+                <div>
+                    <div>1. <a href="/Reports/LabourDatabaseReportFilter">Labour Database Report</a></div>
+                </div>
+            </div>
+        </fieldset>
+    </div>
+</div>
+
